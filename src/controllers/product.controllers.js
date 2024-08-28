@@ -4,7 +4,7 @@ const Category = require("../models/Category");
 const ProductImg = require("../models/ProductImg");
 
 const getAll = catchError(async (req, res) => {
-  const results = await Product.findAll({ include: [Category] });
+  const results = await Product.findAll({ include: [Category, ProductImg] });
   return res.json(results);
 });
 
@@ -15,7 +15,9 @@ const create = catchError(async (req, res) => {
 
 const getOne = catchError(async (req, res) => {
   const { id } = req.params;
-  const result = await Product.findByPk(id, { include: [Category] });
+  const result = await Product.findByPk(id, {
+    include: [Category, ProductImg],
+  });
   if (!result) return res.sendStatus(404);
   return res.json(result);
 });
@@ -38,9 +40,10 @@ const update = catchError(async (req, res) => {
 });
 const setProducts = catchError(async (req, res) => {
   const { id } = req.params;
-  const image = await ProductImg.findByPk(id);
-  await image.setProducts(req.body);
-  const images = await image.getProducts();
+  const products = await Product.findByPk(id);
+  if (!products) return res.sendStatus(404);
+  await products.setProductImgs(req.body);
+  const images = await products.getProductImgs();
   return res.json(images);
 });
 

@@ -20,6 +20,6 @@ routerProduct
   .put(verifyJwt, update); //🔐
 
 //products/:id/productImg
-routerProduct.route("/:id/products_images").post(verifyJwt, setProducts);
+routerProduct.route("/:id/images").post(verifyJwt, setProducts);
 
 module.exports = routerProduct;
