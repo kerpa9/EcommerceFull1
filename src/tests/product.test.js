@@ -2,14 +2,18 @@ require("../models");
 const request = require("supertest");
 const app = require("../app");
 const Category = require("../models/Category");
+const ProductImg = require("../models/ProductImg");
 
 const BASE_URL_LOGIN = "/api/v1/users/login";
 const BASE_URL = "/api/v1/products";
+// const SET_IMG_BASE_URL = "/api/v1/products/:id/images";
 let TOKEN;
 let category;
 
 let product;
+let createImage;
 let productId;
+// let imagesId;
 
 beforeAll(async () => {
   const hits = {
@@ -40,8 +44,6 @@ beforeAll(async () => {
 afterAll(async () => {
   await category.destroy();
 });
-
-//!  TESTS
 
 test("POST -> 'BASE_URL', should return status code 201, and res.body.title === product.title", async () => {
   // console.log(TOKEN);
@@ -115,4 +117,29 @@ test("DELETE -> 'BASE_URL/:id', should return status code 204", async () => {
   // console.log(res.body);
 
   expect(res.status).toBe(204);
+});
+
+test("POST -> 'SET_IMG_BASE_URL', should return status code 201, and res.body.image === product.image", async () => {
+  // console.log(TOKEN);
+  const images = {
+    url: "http://localhost:8080/uploads/MV.jpg",
+    filename: "MV.jpg",
+    productId: product.id,
+  };
+
+  createImage = await ProductImg.create(images);
+
+  const res = await request(app)
+    .post(`${BASE_URL}/${productId}/images`)
+    .send([createImage.id]);
+  // .set("Authorization", `Bearer ${TOKEN}`);
+  // imagesId = res.body.id;
+  // console.log(res.body);
+
+  // expect(res.status).toBe(201);
+  // expect(res.body).toBeDefined();
+  // expect(res.body.title).toBe(product.title);
+  // expect(res.body.categoryId).toBe(category.id);
+
+  await createImage.destroy();
 });

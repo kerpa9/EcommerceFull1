@@ -1,8 +1,6 @@
 const request = require("supertest");
 const app = require("../app");
 const Product = require("../models/Product");
-const ProductImg = require("../models/ProductImg");
-const User = require("../models/User");
 require("../models");
 
 const BASE_URL_LOGIN = "/api/v1/users/login";
@@ -80,7 +78,7 @@ test("GET -> 'BASE_URL/:id', should return status code 200, and res.body.quantit
     .get(`${BASE_URL}/${cartId}`)
     .set("Authorization", `Bearer ${TOKEN}`);
 
-  console.log(res.body);
+  // console.log(res.body);
 
   expect(res.status).toBe(200);
   expect(res.body).toBeDefined();
@@ -100,7 +98,7 @@ test("PUT-> 'BASE_URL/:id', should return status code 200, and res.body.quantity
     .put(`${BASE_URL}/${cartId}`)
     .send(updateQuantity)
     .set("Authorization", `Bearer ${TOKEN}`);
-  console.log(res.body);
+  // console.log(res.body);
 
   expect(res.status).toBe(200);
   expect(res.body).toBeDefined();
